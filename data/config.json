@@ -1,0 +1,32 @@
+{
+  "device": {
+    "name": "waveshare001",
+    "friendly_name": "WaveShare001",
+    "comment": "WaveShare ESP32-S3-POE-ETH-8DI-8RO device"
+  },
+  "network": {
+    "type": "ethernet",
+    "ethernet": {
+      "enabled": true,
+      "type": "W5500"
+    },
+    "wifi": {
+      "enabled": false,
+      "ap_mode": true
+    }
+  },
+  "signal_k": {
+    "enabled": true,
+    "server": "signalk.local",
+    "port": 3000,
+    "use_mqtt": false
+  },
+  "features": {
+    "digital_inputs": 8,
+    "relays": 8,
+    "buzzer": true,
+    "rgb_led": true,
+    "rtc": true,
+    "modbus": true
+  }
+}
