@@ -24,6 +24,39 @@
 #include "ethernet_config.h"
 #include "i2c_setup.h"
 #include "led_buzzer.h"
+#include <sensesp/sensesp_app.h>
+#include <sensesp/signalk/signalk_value_listener.h>
+#include <sensesp/sensors/digital_output.h>
+
+// Define the GPIO pin connected to your relay
+const int RELAY_PIN = 22; 
+
+// Define the Signal K path your dashboard uses to control the relay
+// Example: electrical.switches.anchorLight
+const char* sk_path = "electrical.switches.anchorLight";
+
+void setup() {
+  // Setup the pin as an output and set it to LOW initially
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+
+  // Initialize SensESP
+  sensesp_app = new SensESPApp();
+
+  // Create a listener that listens to the Signal K path
+  auto* sk_listener = new SKValueListener<bool>(sk_path);
+
+  // Connect the listener to a LambdaConsumer that triggers the relay
+  sk_listener->connectTo(new LambdaConsumer<bool>([](bool payload) {
+    if (payload) {
+      digitalWrite(RELAY_PIN, HIGH); // Turn Relay ON
+    } else {
+      digitalWrite(RELAY_PIN, LOW);  // Turn Relay OFF
+    }
+  }));
+
+  sensesp_app->start();
+}
 
 // Global instances
 SensESPApp* sensesp_app = nullptr;
